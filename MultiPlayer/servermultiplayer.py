@@ -4,10 +4,10 @@ import sys
 import threading
 import time
 import pickle
+import MultiPlayer
 
 from PyQt5.QtWidgets import QApplication
 
-from MultiPlayer import Asteroid
 from MultiPlayer import QObject
 from MultiPlayer.Lobby import Lobby, Lobby_and_conn
 

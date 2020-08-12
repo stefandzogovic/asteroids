@@ -16,6 +16,7 @@ from PyQt5.QtWidgets import (
 
 from MultiPlayer import networkmultiplayer, Missile, Asteroid
 
+
 in_lobby = 0
 spejs = ""
 brojacthreadova = 0
