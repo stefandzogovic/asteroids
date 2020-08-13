@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY . /usr/src/app
 
-CMD ["python", "/usr/src/app/MultiPlayer/servermultiplayer.py"]
+CMD ["python", "/usr/src/app/MultiPlayer.servermultiplayer"]

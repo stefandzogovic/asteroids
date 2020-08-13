@@ -1,32 +1,15 @@
 import math
-import sys
 import random
 import time
-
 from random import randrange
 
-from PyQt5 import QtCore
 from PyQt5.QtCore import (
-    Qt,
-    QBasicTimer,
-    QRectF, QThread, pyqtSignal, QSize, QObject)
+    QThread, pyqtSignal)
 from PyQt5.QtGui import (
-    QBrush,
-    QPixmap,
-    QFont,
-    QImage,
-    QColor, QPen, QPainter)
+    QPixmap)
 from PyQt5.QtWidgets import (
     QDesktopWidget,
-    QApplication,
-    QGraphicsItem,
-    QGraphicsPixmapItem,
-    QGraphicsRectItem,
-    QGraphicsScene,
-    QGraphicsView,
-    QMainWindow, QGraphicsLineItem, QLabel)
-
-from MultiPlayer import Lobby
+    QGraphicsPixmapItem)
 
 ASTEROID_SIZE3 = 50
 ASTEROID_SIZE2 = 100

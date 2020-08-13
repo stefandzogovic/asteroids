@@ -1,6 +1,3 @@
-from PyQt5.QtCore import QObject
-
-
 class Lobby:
     def __init__(self, id):
         self.player_cnt = 0

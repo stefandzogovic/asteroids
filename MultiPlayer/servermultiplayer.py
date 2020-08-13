@@ -1,15 +1,14 @@
+import pickle
 import random
 import socket
 import sys
 import threading
-import time
-import pickle
-import MultiPlayer
 
 from PyQt5.QtWidgets import QApplication
 
-from MultiPlayer import QObject
-from MultiPlayer.Lobby import Lobby, Lobby_and_conn
+from MultiPlayer import QObject, Lobby
+from MultiPlayer.Lobby import Lobby_and_conn
+
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connections = []

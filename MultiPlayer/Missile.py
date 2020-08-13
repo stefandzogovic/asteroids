@@ -1,28 +1,10 @@
 import math
-import sys
-import time
 
-from random import randrange, randint
-import threading
-from PyQt5.QtCore import (
-    Qt,
-    QBasicTimer,
-    QRectF, QThread, pyqtSignal)
 from PyQt5.QtGui import (
-    QBrush,
-    QPixmap,
-    QImage,
-    QColor, QPen)
-from PyQt5.QtMultimedia import QSound
+    QPixmap)
 from PyQt5.QtWidgets import (
     QDesktopWidget,
-    QApplication,
-    QGraphicsItem,
-    QGraphicsPixmapItem,
-    QGraphicsRectItem,
-    QGraphicsScene,
-    QGraphicsView,
-    QMainWindow, QGraphicsLineItem)
+    QGraphicsPixmapItem)
 
 
 class Missiles(QGraphicsPixmapItem):

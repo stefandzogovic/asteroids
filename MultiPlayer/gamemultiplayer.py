@@ -1,21 +1,19 @@
 import datetime
 import functools
 import math
-import sys
 import pickle
+import sys
 
 from PyQt5.QtCore import (
     Qt, QBasicTimer, pyqtSlot)
 from PyQt5.QtGui import (
     QPixmap,
-    QFont, QBrush)
-from PyQt5.QtMultimedia import QSound
+    QBrush)
 from PyQt5.QtWidgets import (
     QGraphicsPixmapItem, QGraphicsScene, QDesktopWidget, QGraphicsRectItem, QGraphicsView, QApplication, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QHeaderView, QPushButton, QGraphicsProxyWidget)
+    QTableWidgetItem, QPushButton)
 
 from MultiPlayer import networkmultiplayer, Missile, Asteroid
-
 
 in_lobby = 0
 spejs = ""
