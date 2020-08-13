@@ -25,9 +25,9 @@ port = 9000
 server_ip = socket.gethostbyname(server)
 print(server_ip)
 
-lobby = Lobby(1)
+lobby = Lobby.Lobby(1)
 lobbies.append(lobby)
-lobbies_and_connections.append(Lobby_and_conn(lobby))
+lobbies_and_connections.append(Lobby.Lobby_and_conn(lobby))
 
 try:
     s.bind((server, port))
