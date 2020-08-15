@@ -22,8 +22,8 @@ lista = []
 screen = 0
 current_lobby_id = 0
 povratnistring = ","
-SCREEN_WIDTH            = 800
-SCREEN_HEIGHT           = 600
+SCREEN_WIDTH            = 1920
+SCREEN_HEIGHT           = 1080
 #PLAYER_SPEED            = 3   # pix/frame
 PLAYER_BULLET_X_OFFSETS = [0, 45]
 PLAYER_BULLET_Y         = 15
@@ -64,7 +64,7 @@ class Player(QGraphicsPixmapItem):
         try:
             for asteroid in listaasteroida:
                 if self.collidesWithItem(asteroid):
-                    self.setPos(scene.screen.width() // 2, scene.screen.height() // 2)  # ako udari asteroid, respawn na sredinu ekrana
+                    self.setPos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)  # ako udari asteroid, respawn na sredinu ekrana
                     povratnistring = "," + str(scene.net.id) + "@" + str(asteroid.id) + "@" + str(asteroid.x()) + "@" + str(asteroid.y())
                     listaasteroida.remove(asteroid)
                     scene.removeItem(asteroid)
@@ -140,14 +140,14 @@ class Player(QGraphicsPixmapItem):
                 self.active_missiles.append(new_missile)
                 self.fire_time = new_time
 
-        if int(math.ceil(self.x() / 10) * 10) > screen.width():               # ako player izade van ekrana poslace ga
+        if int(math.ceil(self.x() / 10) * 10) > SCREEN_WIDTH:               # ako player izade van ekrana poslace ga
             self.setPos(dx, int(self.y()) + dy)                               # suprotnu stranu ekrana
-        elif int(math.ceil(self.y() / 10) * 10) > screen.height():
+        elif int(math.ceil(self.y() / 10) * 10) > SCREEN_HEIGHT:
             self.setPos(int(self.x()) + dx,  dy)
         elif int(math.ceil(self.x() / 10) * 10) < -self.slika.height():
-            self.setPos(int(screen.width()) + dx, self.y() + dy)
+            self.setPos(int(SCREEN_WIDTH + dx, self.y() + dy))
         elif int(math.ceil(self.y() / 10) * 10) < - self.slika.height():
-            self.setPos(self.x() + dx, int(screen.height()) + dy)
+            self.setPos(self.x() + dx, int(SCREEN_HEIGHT + dy))
         else:
             self.setPos(self.x() + dx, self.y() + dy)
 
@@ -161,24 +161,21 @@ class Scene(QGraphicsScene):
         # hold the set of keys we're pressing
         self.keys_pressed = set()
 
-        global screen
-        screen = QDesktopWidget().screenGeometry()
-
         # use a timer to get 60Hz refresh (hopefully)
         self.timer = QBasicTimer()
         self.timer.start(FRAME_TIME_MS, self)
 
         bg = QGraphicsRectItem()
-        bg.setRect(0, 0, self.screen.width(), self.screen.height())
+        bg.setRect(0, 0, SCREEN_WIDTH , SCREEN_HEIGHT)
         bg.setBrush(QBrush(Qt.black))
         self.addItem(bg)
 
-        self.player = Player((self.screen.width()//2, self.screen.height()//2), datetime.datetime.now())
+        self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), datetime.datetime.now())
 
 
-        self.player2 = Player((self.screen.width()//2 + 150, self.screen.height()//2 + 150), datetime.datetime.now())
-        self.player3 = Player((self.screen.width()//2 + 150, self.screen.height()//2 + 150), datetime.datetime.now())
-        self.player4 = Player((self.screen.width()//2 + 150, self.screen.height()//2 + 150), datetime.datetime.now())
+        self.player2 = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), datetime.datetime.now())
+        self.player3 =Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), datetime.datetime.now())
+        self.player4 = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), datetime.datetime.now())
         self.plejeri = [self.player, self.player2, self.player3, self.player4]
         self.addItem(self.player)
         self.addItem(self.player2)
@@ -196,8 +193,8 @@ class Scene(QGraphicsScene):
         self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Available"))
         self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Create/Join"))
 
-        self.table.setFixedSize(1000, 450)
-        self.table.move(screen.width() / 2 - self.table.width() / 2, screen.height() / 2 - self.table.height() / 4)
+        self.table.setFixedSize(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3 )
+        self.table.move(SCREEN_WIDTH / 2 - self.table.width() / 2, SCREEN_HEIGHT / 2 - self.table.height() / 4)
         self.table.adjustSize()
         self.table.horizontalHeader().setSectionResizeMode(1)
         self.table.verticalHeader().setVisible(0)
@@ -222,9 +219,10 @@ class Scene(QGraphicsScene):
         self.view = QGraphicsView(self)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.view.setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.setSceneRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
         self.view.showFullScreen()
-        self.view.setFixedSize(self.screen.width(), self.screen.height())
-        self.setSceneRect(0, 0, self.screen.width(), self.screen.height())
+
 
     @pyqtSlot()
     def on_click_join(self, lobby_id, player_cnt):
@@ -416,7 +414,7 @@ class Scene(QGraphicsScene):
                             self.addItem(x)
                             listaasteroida.append(x)
 
-                            # x.th = Asteroid.MoveThread(x.velicina)
+                            # x.th = Asteroid.MoveThread2(x.velicina, self.lobbies[current_lobby_id - 1])
                             # x.th.s.connect(x.updatePosition)
                             # x.th.start()
             except Exception as e:

@@ -14,6 +14,8 @@ from PyQt5.QtWidgets import (
 ASTEROID_SIZE3 = 50
 ASTEROID_SIZE2 = 100
 ASTEROID_SIZE1 = 200
+SCREEN_HEIGHT = 1080
+SCREEN_WIDTH = 1920
 
 class Asteroid(QGraphicsPixmapItem):
     def __init__(self, id, x, y, putanja, velicina, z):
@@ -56,55 +58,55 @@ class Asteroid(QGraphicsPixmapItem):
         screen = QDesktopWidget().screenGeometry()
         if self.z == 1:  # asteroid se stvara na levom delu ekrana
             if self.putanja == 0:  # stvoren asteroid se krece dijagonalno ka dole
-                if int(math.ceil(self.x() / 10) * 10) == screen.width():
+                if int(math.ceil(self.x() / 10) * 10) == SCREEN_WIDTH:
                     self.setPos(0, self.y())
-                if int(math.ceil(self.y() / 10) * 10) == screen.height():
+                if int(math.ceil(self.y() / 10) * 10) == SCREEN_HEIGHT:
                     self.setPos(self.x(), 0)
                 else:
                     self.setPos(x + self.x(), self.y() + y)
             else:  # stvoren asteroid se krece dijagonalno ka gore
-                if int(math.ceil(self.x() / 10) * 10) == screen.width():
+                if int(math.ceil(self.x() / 10) * 10) == SCREEN_WIDTH:
                     self.setPos(0, self.y())
                 if int(math.ceil(self.y() / 10) * 10) == -150:
-                    self.setPos(self.x(), screen.height())
+                    self.setPos(self.x(), SCREEN_HEIGHT)
                 else:
                     self.setPos(x + self.x(), self.y() - y)
 
         elif self.z == 2:
             if self.putanja == 0:
                 if int(math.ceil(self.x() / 10) * 10) == 0:
-                    self.setPos(screen.width(), self.y())
+                    self.setPos(SCREEN_WIDTH, self.y())
                 elif int(math.ceil(self.y() / 10) * 10) == -150:
-                    self.setPos(self.x(), screen.height())
+                    self.setPos(self.x(), SCREEN_HEIGHT)
                 else:
                     self.setPos(self.x() - x, self.y() - y)
             else:
                 if int(math.ceil(self.x() / 10) * 10) == -150:
-                    self.setPos(screen.width(), self.y())
-                if int(math.ceil(self.y() / 10) * 10) == screen.height():
+                    self.setPos(SCREEN_WIDTH, self.y())
+                if int(math.ceil(self.y() / 10) * 10) == SCREEN_HEIGHT:
                     self.setPos(self.x(), 0)
                 else:
                     self.setPos(self.x() - x, self.y() + y)
 
         elif self.z == 3:
             if self.putanja == 0:
-                if int(math.ceil(self.y() / 10) * 10) == screen.height():
+                if int(math.ceil(self.y() / 10) * 10) == SCREEN_HEIGHT:
                     self.setPos(self.x(), 0)
-                if int(math.ceil(self.x() / 10) * 10) == screen.width():
+                if int(math.ceil(self.x() / 10) * 10) == SCREEN_WIDTH:
                     self.setPos(0, self.y())
                 else:
                     self.setPos(self.x() + x * 0.4, self.y() + y * 1.4)
             else:
-                if int(math.ceil(self.y() / 10) * 10) == screen.height():
+                if int(math.ceil(self.y() / 10) * 10) == SCREEN_HEIGHT:
                     self.setPos(self.x(), 0)
                 if int(math.ceil(self.x() / 10) * 10) == -150:
-                    self.setPos(screen.width(), self.y())
+                    self.setPos(SCREEN_WIDTH, self.y())
                 else:
                     self.setPos(self.x() - x * 0.4, self.y() + y * 1.4)
 
         elif self.z == 4:
             if int(math.ceil(self.y() / 10) * 10) == -50:
-                self.setPos(self.x(), screen.height())
+                self.setPos(self.x(), SCREEN_HEIGHT)
             else:
                 self.setPos(self.x(), self.y() - y)
 
@@ -122,6 +124,19 @@ class MoveThread(QThread):
             time.sleep(0.01)
             self.s.emit(self.velicina / 2 + self.var, self.velicina / 2 + self.var)
 
+class MoveThread2(QThread):
+    s = pyqtSignal(float, float)
+
+    def __init__(self, velicina, lobby):
+        super().__init__()
+        self.velicina = velicina
+        self.var = lobby.trenutannivo / 10
+
+    def run(self):
+        while True:
+            time.sleep(0.01)
+            self.s.emit(self.velicina / 2 + self.var, self.velicina / 2 + self.var)
+
 class CreateAsteroidsThread(QThread):
     s = pyqtSignal(float, float, float, float, object)
 
@@ -130,7 +145,6 @@ class CreateAsteroidsThread(QThread):
         self.lobby = lobby
 
     def run(self):
-        screen = QDesktopWidget().screenGeometry()
         blokiraj = True
         while True:
             if self.lobby.lobby.queue_for_asteroids:
@@ -143,15 +157,15 @@ class CreateAsteroidsThread(QThread):
                 if xory == 0:
                     leftorright = random.randint(0, 1)
                     if leftorright == 0:
-                        self.s.emit(0, randrange(0, screen.height()), 1, velicina, self.lobby)
+                        self.s.emit(0, randrange(0, SCREEN_HEIGHT), 1, velicina, self.lobby)
                     else:
-                        self.s.emit(screen.width(), randrange(0, screen.height()), 2, velicina, self.lobby)
+                        self.s.emit(SCREEN_WIDTH, randrange(0, SCREEN_WIDTH), 2, velicina, self.lobby)
                 else:
                     upordown = random.randint(0, 1)
                     if upordown == 0:
-                        self.s.emit(randrange(0, screen.width()), 0, 3, velicina, self.lobby)
+                        self.s.emit(randrange(0, SCREEN_WIDTH), 0, 3, velicina, self.lobby)
                     else:
-                        self.s.emit(randrange(0, screen.width()), screen.height() - 25, 4, velicina, self.lobby)
+                        self.s.emit(randrange(0, SCREEN_WIDTH), SCREEN_HEIGHT - 25, 4, velicina, self.lobby)
 
                 time.sleep(0.5)
                 self.lobby.lobby.brojacthreadova = self.lobby.lobby.brojacthreadova + 1
@@ -191,7 +205,6 @@ def createAsteroid(iks, ips, z, velicina, lobby):
 
 
 def createRandomAsteroid(vel):
-        screen = QDesktopWidget().screenGeometry()
         velicina = float(vel) - 1
         if velicina == 0:
             return 0
@@ -199,13 +212,13 @@ def createRandomAsteroid(vel):
         if xory == 0:
             leftorright = random.randint(0, 1)
             if leftorright == 0:
-                return 0, randrange(0, screen.height()), 1, velicina
+                return 0, randrange(0, SCREEN_HEIGHT), 1, velicina
             else:
-                return screen.width(), randrange(0, screen.height()), 2, velicina
+                return SCREEN_WIDTH, randrange(0, SCREEN_HEIGHT), 2, velicina
 
         else:
             upordown = random.randint(0, 1)
             if upordown == 0:
-                return randrange(0, screen.width()), 0, 3, velicina
+                return randrange(0, SCREEN_WIDTH), 0, 3, velicina
             else:
-                return randrange(0, screen.width() - 150), screen.height() - 25, 4, velicina
+                return randrange(0, SCREEN_WIDTH - 150), SCREEN_HEIGHT - 25, 4, velicina
